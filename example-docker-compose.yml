@@ -1,0 +1,31 @@
+services:
+  ursim_airo: # Docker image based on ursim. See (https://hub.docker.com/r/universalrobots/ursim_e-series)
+    image: universalrobots/ursim_e-series:latest
+    container_name: ursim_airo
+    ports:
+      - "6080:6080" # VNC webpage port for accessing Polyscope in a browser
+    networks:
+      - airo-network # Network name allows containers to communicate over localhost
+    profiles:
+      - ur-simulator # Optional flag. If the simulator is needed simply run "docker-compose --profile ur-simulator up"
+    environment:
+      - ROBOT_MODEL=UR3e # Important, change this robot model as needed
+    restart: unless-stopped
+
+  airo:
+    build:
+      context: ./airo-docker # Location of the Dockerfile
+    container_name: airo-docker-main
+    image: airo-docker
+    ports:
+      - "7000:7000" # Meshcat port
+    volumes:
+      - "./workspace:/workspace/airo" # Superseeds the need to use docker run -v ....
+    working_dir: /workspace/airo
+    networks:
+      - airo-network # Network name allows containers to communicate over localhost
+    restart: unless-stopped
+
+networks: # Needed configuration to bridge the network
+  airo-network:
+    driver: bridge
