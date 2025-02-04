@@ -13,7 +13,10 @@ Running:
 ```
 docker run -it airo-docker-image
 ```
-
+Referencing (In Docker):
+```
+FROM ghcr.io/dnatov/airo-docker:latest
+```
 ## Optional Steps 🧩
 
 ### Create a workspace 🗄️
