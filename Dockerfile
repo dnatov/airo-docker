@@ -1,5 +1,5 @@
-# Use Python 3.10 image base
-FROM python:3.10-bookworm
+# Use a Miniconda base image
+FROM continuumio/miniconda3
 
 # Set the working directory inside the container
 WORKDIR /workspace
@@ -18,16 +18,8 @@ RUN git clone https://github.com/airo-ugent/airo-mono.git
 # Change to the repository directory
 WORKDIR /workspace/airo-mono
 
-# Update Pip
-RUN pip install --upgrade pip
+# Create the Conda environment from the environment.yaml file
+RUN conda env create -f environment.yaml
 
-# Install all airo-mono packages in edit version from the git repo
-RUN pip install -e /workspace/airo-mono/airo-typing \
-    && pip install -e /workspace/airo-mono/airo-spatial-algebra \
-	&& pip install -e /workspace/airo-mono/airo-dataset-tools \
-	&& pip install -e /workspace/airo-mono/airo-camera-toolkit \
-	&& pip install -e /workspace/airo-mono/airo-robots \
-    && pip install -e /workspace/airo-mono/airo-teleop
-	
-# Default command to keep the container running
-CMD ["python"]
+# Activate the environment by default
+SHELL ["conda", "run", "-n", "airo-env", "/bin/bash", "-c"]
