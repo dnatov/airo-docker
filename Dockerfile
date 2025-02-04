@@ -21,5 +21,5 @@ WORKDIR /workspace/airo-mono
 # Create the Conda environment from the environment.yaml file
 RUN conda env create -f environment.yaml
 
-# Activate the environment by default
-SHELL ["conda", "run", "-n", "airo-env", "/bin/bash", "-c"]
+# Finish
+CMD ["python"]
